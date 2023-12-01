@@ -3,30 +3,23 @@ import React from 'react';
 import Button from '../Button';
 import ToastShelf from '../ToastShelf';
 import styles from './ToastPlayground.module.css';
-
-const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
+import { ToastContext } from '../ToastProvider/ToastProvider';
 
 function ToastPlayground() {
   const [message, setMessage] = React.useState('');
   const [variant, setVariant] = React.useState('notice');
-  const [toasts, setToasts] = React.useState([]);
+
+  const { VARIANT_OPTIONS, createNewToast } = React.useContext(ToastContext);
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const id = crypto.randomUUID();
-    const nextToasts = [...toasts, { message, variant, id }];
-    setToasts(nextToasts);
+    createNewToast(message, variant);
 
     // reset form
     setMessage('');
     setVariant('notice');
   };
-
-  const handleDismiss = (id) => {
-    const nextToasts = toasts.filter((toast) => toast.id !== id);
-    setToasts(nextToasts);
-  }
 
   return (
     <div className={styles.wrapper}>
@@ -34,7 +27,7 @@ function ToastPlayground() {
         <img alt="Cute toast mascot" src="/toast.png" />
         <h1>Toast Playground</h1>
       </header>
-      <ToastShelf toasts={toasts} handleDismiss={handleDismiss} />
+      <ToastShelf />
       <form className={styles.controlsWrapper} onSubmit={handleSubmit}>
         <div className={styles.row}>
           <label
