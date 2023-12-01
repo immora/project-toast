@@ -9,6 +9,8 @@ function ToastPlayground() {
   const [message, setMessage] = React.useState('');
   const [variant, setVariant] = React.useState('notice');
 
+  const messageInputRef = React.useRef();
+
   const { VARIANT_OPTIONS, createNewToast } = React.useContext(ToastContext);
 
   const handleSubmit = (event) => {
@@ -19,7 +21,9 @@ function ToastPlayground() {
     // reset form
     setMessage('');
     setVariant('notice');
+    messageInputRef.current.focus();
   };
+
 
   return (
     <div className={styles.wrapper}>
@@ -39,6 +43,7 @@ function ToastPlayground() {
           </label>
           <div className={styles.inputWrapper}>
             <textarea
+              ref={messageInputRef}
               required
               id="message"
               className={styles.messageInput}
